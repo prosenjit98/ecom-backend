@@ -10,9 +10,9 @@ exports.signin = (req, res) => {
         if (user) {
             console.log(user)
             if (user.authenticate(req.body.password) && user.role === 'admin') {
-                const token = jwt.sign({ _id: user._id }, process.env.SECREATE_KEY, { expiresIn: "1h" })
+                const token = jwt.sign({ _id: user._id }, process.env.SECREATE_KEY, { expiresIn: "60d" })
                 const { firstName, lastName, email, role, fullName } = user
-                res.cookie('token', token, { expiresIn: '60s' })
+                res.cookie('token', token, { expiresIn: '60d' })
                 res.status(200).send({ token, user: { firstName, lastName, email, role, fullName } })
             } else {
                 return res.status(400).send({ message: "invalid password" })
@@ -38,7 +38,7 @@ exports.signup = (req, res) => {
             role: "admin"
         })
         _user.save().then(data => {
-            const token = jwt.sign({ _id: data._id }, process.env.SECREATE_KEY, { expiresIn: "1h" })
+            const token = jwt.sign({ _id: data._id }, process.env.SECREATE_KEY, { expiresIn: "60d" })
             console.log(token)
             return res.status(201).send({
                 token,
