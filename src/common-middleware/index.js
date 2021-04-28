@@ -18,14 +18,18 @@ var storage = multer.diskStorage({
 exports.upload = multer({ storage })
 
 
-exports.requireSignin = (req, res, next) => {
+exports.requireSignin = async (req, res, next) => {
   if (req.headers.authorization) {
+    console.log("authenication start:========================")
     const token = req.headers.authorization.split(" ")[1]
-    const user = jwt.verify(token, process.env.SECREATE_KEY);
-    console.log("into to signin authenication:=========================", user)
-    req.user = user
+    try {
+      const user = await jwt.verify(token, process.env.SECREATE_KEY);
+      req.user = user
+    } catch (err) {
+      return res.status(401).send({ message: "Authorisation Required" })
+    }
   } else {
-    return res.status(400).send({ message: "Authorisation Required" })
+    return res.status(401).send({ message: "Authorisation Required" })
   }
   next();
 }

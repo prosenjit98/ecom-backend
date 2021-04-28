@@ -17,6 +17,7 @@ const productRoutes = require('./routes/product')
 const cartRoutes = require('./routes/cart')
 const initialDataRoutes = require('./routes/admin/initialData')
 const pageRoutes = require('./routes/admin/page')
+const userAddressRoutes = require('./routes/address')
 
 //mongodb connection
 // mongodb + srv://root:<password>@cluster0.pmvnv.mongodb.net/<dbname>?retryWrites=true&w=majority
@@ -53,6 +54,7 @@ app.use('/api', productRoutes)
 app.use('/api', cartRoutes)
 app.use('/api', initialDataRoutes)
 app.use('/api', pageRoutes)
+app.use('/api', userAddressRoutes)
 
 app.listen(process.env.PORT, () => {
     console.log("server is runing on", process.env.PORT)
