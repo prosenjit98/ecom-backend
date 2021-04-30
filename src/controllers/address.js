@@ -6,16 +6,29 @@ exports.addAddress = (req, res) => {
   console.log(payload);
   if (payload.address) {
     UserAddress.findOne({ user: req.user._id }).exec((error, ser_with_addess) => {
+      if (error) return res.status(400).json({ error });
       if (ser_with_addess) {
         console.log(ser_with_addess)
-        UserAddress.findOneAndUpdate({ user: req.user._id }, {
-          '$push': {
-            "address": payload.address
-          }
-        }, { new: true, unsert: true }).exec((error, address) => {
-          if (error) return res.status(400).json({ error });
-          if (address) return res.status(201).json({ address })
-        })
+        if (payload.address._id) {
+          UserAddress.findOneAndUpdate({ user: req.user._id, "address._id": payload.address._id }, {
+            '$set': {
+              "address.$": payload.address
+            }
+          }, { new: true }).exec((error, address) => {
+            if (error) return res.status(400).json({ error });
+            if (address) return res.status(201).json({ address })
+          })
+
+        } else {
+          UserAddress.findOneAndUpdate({ user: req.user._id }, {
+            '$push': {
+              "address": payload.address
+            }
+          }, { new: true, unsert: true }).exec((error, address) => {
+            if (error) return res.status(400).json({ error });
+            if (address) return res.status(201).json({ address })
+          })
+        }
       }
       else {
         // const user = await User.findOne({ _id: req.user._id })
