@@ -49,15 +49,20 @@ exports.getProductsBySlug = (req, res) => {
         if (error) {
           return res.status(500).send(error)
         }
-        res.status(200).send({
-          products,
-          productByPrice: {
-            under5K: products.filter(product => product.price <= 5000),
-            under10K: products.filter(product => product.price > 5000 && product.price <= 10000),
-            under15K: products.filter(product => product.price > 10000 && product.price <= 15000),
-            under20K: products.filter(product => product.price > 15000 && product.price <= 20000)
-          }
-        })
+        if (category.type && products.length > 0) {
+          res.status(200).send({
+            products,
+            productByPrice: {
+              under5K: products.filter(product => product.price <= 5000),
+              under10K: products.filter(product => product.price > 5000 && product.price <= 10000),
+              under15K: products.filter(product => product.price > 10000 && product.price <= 15000),
+              under20K: products.filter(product => product.price > 15000 && product.price <= 20000)
+            }
+          })
+        } else {
+          res.status(200).json({ products })
+        }
+
 
       })
     }

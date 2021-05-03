@@ -26,7 +26,7 @@ exports.addItemToCart = (req, res) => {
         } else {
           condition = { 'user': req.user._id }
           update = {
-            '$set': { 'cartItems': cartItem }
+            '$push': { 'cartItems': cartItem }
           }
         }
         promiseArray.push(runUpdate(condition, update))

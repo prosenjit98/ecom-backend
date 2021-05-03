@@ -4,10 +4,11 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
 exports.signin = (req, res) => {
-    User.findOne({ email: req.body.email }).exec((error, user) => {
+    User.findOne({ email: req.body.email }).exec(async (error, user) => {
         if (error) return res.status(400).send({ error })
         if (user) {
-            if (user.authenticate(req.body.password)) {
+            const isvalidPassword = await user.authenticate(req.body.password)
+            if (isvalidPassword) {
                 const token = jwt.sign({ _id: user._id }, process.env.SECREATE_KEY, { expiresIn: "1h" })
                 const { firstName, lastName, email, role, fullName } = user
                 res.status(200).send({ token, user: { firstName, lastName, email, role, fullName } })
