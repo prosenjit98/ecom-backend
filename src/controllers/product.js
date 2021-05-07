@@ -40,7 +40,7 @@ exports.createProduct = (req, res) => {
 exports.getProductsBySlug = (req, res) => {
   const { slug } = req.params;
   console.log(slug);
-  Category.findOne({ slug: slug }).select('_id').exec((error, category) => {
+  Category.findOne({ slug: slug }).select('_id type').exec((error, category) => {
     if (error) {
       return res.status(500).send(error)
     }
@@ -49,6 +49,7 @@ exports.getProductsBySlug = (req, res) => {
         if (error) {
           return res.status(500).send(error)
         }
+        console.log(category)
         if (category.type && products.length > 0) {
           res.status(200).send({
             products,
