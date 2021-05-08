@@ -7,4 +7,4 @@ const router = express.Router();
 
 router.post('/order/update', requireSignin, adminMiddleware, updateOrders)
 
-module.exports = routers
+module.exports = router
