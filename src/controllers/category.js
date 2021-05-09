@@ -12,7 +12,7 @@ exports.addCatagory = (req, res) => {
     categoryObj.parentId = req.body.parentId
   }
   if (req.file) {
-    categoryObj.categoryImage = process.env.API + '/public/' + req.file.filename;
+    categoryObj.categoryImage = '/public/' + req.file.filename;
   }
 
   const cat = new Category(categoryObj)
