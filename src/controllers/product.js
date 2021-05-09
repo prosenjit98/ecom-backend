@@ -53,6 +53,12 @@ exports.getProductsBySlug = (req, res) => {
         if (category.type && products.length > 0) {
           res.status(200).send({
             products,
+            priceRange: {
+              under5k: 5000,
+              under10k: 10000,
+              under15k: 15000,
+              under20k: 20000
+            },
             productByPrice: {
               under5K: products.filter(product => product.price <= 5000),
               under10K: products.filter(product => product.price > 5000 && product.price <= 10000),
@@ -85,5 +91,29 @@ exports.getProductById = (req, res) => {
   } else {
     return res.status(500).send({ error: 'Params require' })
   }
+}
 
+exports.deleteProductById = (req, res) => {
+  const { productId } = req.body.data;
+  console.log(productId);
+  if (productId) {
+    Product.deleteOne({ _id: productId }).exec((error, result) => {
+      if (error) {
+        return res.status(500).send(error)
+      }
+      if (result) {
+        return res.status(202).send({ result })
+      }
+    })
+  } else {
+    return res.status(500).send({ message: "parmas reqruieed" })
+  }
+}
+
+exports.getProducts = async (req, res) => {
+  const products = await Product.find({})
+    .select("_id name price quantity slug description productPictures ")
+    .populate({ path: "category", select: "_id name" }).exec()
+
+  res.status(200).send({ products })
 }

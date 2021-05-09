@@ -4,8 +4,9 @@
   "description": "A backend based on node and express to sever react fornt end of our ecomerace side",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/index.server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/index.server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/index.server.js"
   },
   "keywords": [
     "mern",
