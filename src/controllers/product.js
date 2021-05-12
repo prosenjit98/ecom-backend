@@ -3,6 +3,8 @@ const Product = require('../models/Product')
 const shortid = require('shortid')
 const slugify = require('slugify')
 const Category = require('../models/Category')
+const { createPublicAccess } = require('../common-middleware')
+
 
 exports.createProduct = (req, res) => {
   const token = req.headers.authorization.split(" ")[1]
@@ -11,9 +13,11 @@ exports.createProduct = (req, res) => {
   // res.status(200).json({ file: req.files, body: req.body })
   let productPictures = []
   if (req.files.length > 0) {
-    productPictures = req.files.map(file => { return { img: file.filename } })
+    productPictures = req.files.map(file => {
+      createPublicAccess(file.fileId)
+      return { img: 'https://drive.google.com/uc?export=view&id=' + file.fileId }
+    })
   }
-  console.log(req)
   const product = new Product({
     name: name,
     slug: slugify(name),

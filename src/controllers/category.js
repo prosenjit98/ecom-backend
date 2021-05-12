@@ -1,9 +1,10 @@
 const Category = require('../models/Category')
 const slugify = require('slugify')
+const { createPublicAccess } = require('../common-middleware')
 
 
 
-exports.addCatagory = (req, res) => {
+exports.addCatagory = async (req, res) => {
   const categoryObj = {
     name: req.body.name,
     slug: slugify(req.body.name)
@@ -12,7 +13,9 @@ exports.addCatagory = (req, res) => {
     categoryObj.parentId = req.body.parentId
   }
   if (req.file) {
-    categoryObj.categoryImage = '/public/' + req.file.filename;
+    console.log("resposnce from drive:", req.file)
+    createPublicAccess(req.file.fileId)
+    categoryObj.categoryImage = 'https://drive.google.com/uc?export=view&id=' + req.file.fileId
   }
 
   const cat = new Category(categoryObj)

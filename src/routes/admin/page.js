@@ -6,7 +6,7 @@ const multer = require('multer');
 const shortid = require('shortid')
 //  const { addCatagory, getCategories } = require('../controllers/category');
 const path = require('path');
-const { requireSignin, adminMiddleware } = require("../../common-middleware");
+const { requireSignin, adminMiddleware, uploadToDrive } = require("../../common-middleware");
 
 
 var storage = multer.diskStorage({
@@ -21,7 +21,8 @@ var storage = multer.diskStorage({
 const upload = multer({ storage })
 
 
-router.post('/page/create', requireSignin, adminMiddleware, upload.fields([{ name: 'banners' }, { name: 'products' }]), createPage);
+// router.post('/page/create', requireSignin, adminMiddleware, upload.fields([{ name: 'banners' }, { name: 'products' }]), createPage);
+router.post('/page/create', requireSignin, adminMiddleware, uploadToDrive.fields([{ name: 'banners' }, { name: 'products' }]), createPage);
 router.get('/page/:category/:type', getPage);
 
 module.exports = router
